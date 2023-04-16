@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Navbar from "../components/Navbar/Navbar";
 import Board from "../components/Board/Board";
-// import data from '../data'
+import defaultData from '../data' 
 import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import Editable from "../components/Editable/Editable";
@@ -12,7 +12,7 @@ function App() {
   const [data, setData] = useState(
     localStorage.getItem("kanban-board")
       ? JSON.parse(localStorage.getItem("kanban-board"))
-      : []
+      : defaultData
   );
 
   const defaultDark = window.matchMedia(
@@ -52,17 +52,17 @@ function App() {
     return tempData;
   };
 
-  // const dragCardInSameBoard = (source, destination) => {
-  //   let tempData = Array.from(data);
-  //   console.log("Data", tempData);
-  //   const index = tempData.findIndex(
-  //     (item) => item.id.toString() === source.droppableId
-  //   );
-  //   console.log(tempData[index], index);
-  //   let [removedCard] = tempData[index].card.splice(source.index, 1);
-  //   tempData[index].card.splice(destination.index, 0, removedCard);
-  //   setData(tempData);
-  // };
+  const dragCardInSameBoard = (source, destination) => {
+    let tempData = Array.from(data);
+    console.log("Data", tempData);
+    const index = tempData.findIndex(
+      (item) => item.id.toString() === source.droppableId
+    );
+    console.log(tempData[index], index);
+    let [removedCard] = tempData[index].card.splice(source.index, 1);
+    tempData[index].card.splice(destination.index, 0, removedCard);
+    setData(tempData);
+  };
 
   const addCard = (title, bid) => {
     const index = data.findIndex((item) => item.id === bid);
@@ -131,6 +131,8 @@ function App() {
   }, [data]);
 
   return (
+    <>
+    <h2>Hello</h2>
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="App" data-theme={theme}>
         <Navbar switchTheme={switchTheme} />
@@ -160,6 +162,7 @@ function App() {
         </div>
       </div>
     </DragDropContext>
+    </>
   );
 }
 
